@@ -1,0 +1,7 @@
+[
+  {"question": "我要创建一个工单，我的快递丢了", "expected_keywords": ["工单已创建", "编号"]},
+  {"question": "查看我所有的工单", "expected_keywords": ["工单列表"]},
+  {"question": "我要投诉，商家态度很差", "expected_keywords": ["人工", "投诉"]},
+  {"question": "查询工单1的状态", "expected_keywords": ["工单 1"]},
+  {"question": "退款申请怎么处理", "expected_keywords": ["人工", "审批"]}
+]

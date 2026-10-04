@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from ticket_agent import run_agent
+from ticket_graph import ticket_agent, TicketState
 
 load_dotenv()
 
@@ -18,6 +18,20 @@ def root():
 
 @app.post("/ask/ticket")
 def ask_ticket(q: Question):
-    """客服工单 Agent 接口：支持创建工单、查询状态、列出工单、转人工"""
-    answer = run_agent(q.question, user_id=q.user_id)
-    return {"answer": answer}
+    """客服工单 Agent 接口（基于 LangGraph 状态机）"""
+    initial_state: TicketState = {
+        "user_id": q.user_id,
+        "user_input": q.question,
+        "intent": "",
+        "ticket_id": 0,
+        "is_sensitive": False,
+        "need_human": False,
+        "reply": "",
+        "history": []
+    }
+    result = ticket_agent.invoke(initial_state)
+    return {
+        "answer": result["reply"],
+        "intent": result["intent"],
+        "need_human": result["need_human"]
+    }
